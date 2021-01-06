@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "212862254884",
+    "firebase_url": "https://projeto-integrador-93d50-default-rtdb.firebaseio.com",
+    "project_id": "projeto-integrador-93d50",
+    "storage_bucket": "projeto-integrador-93d50.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:212862254884:android:2d1b0768cf5cdfbde67db1",
+        "android_client_info": {
+          "package_name": "com.example.smart_porta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "212862254884-1ok5ua5vaimdamqrpv6ec7p5gpn18i4p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3b1gwkDKvQijVIjKO4fgd0F_o9yyEndI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "212862254884-1ok5ua5vaimdamqrpv6ec7p5gpn18i4p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
