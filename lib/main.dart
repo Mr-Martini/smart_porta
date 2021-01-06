@@ -15,8 +15,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Smart porta',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
+      themeMode: ThemeMode.system,
+      darkTheme: ThemeData.dark().copyWith(
+        primaryColor: Colors.red,
+        buttonColor: Colors.red,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        textTheme: Typography.blackRedmond,
+      ),
+      theme: ThemeData.light().copyWith(
+        primaryColor: Colors.red,
+        buttonColor: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         textTheme: Typography.blackRedmond,
       ),
@@ -68,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: _scanQrCode,
         tooltip: 'Adicionar dispositivo',
         child: Icon(Icons.add),
+        backgroundColor: Theme.of(context).buttonColor,
       ),
     );
   }
@@ -78,16 +87,30 @@ List<Widget> _buildBody(String deviceId, BuildContext context) {
     return <Widget>[
       Text(
         'Id do dispositivo:',
+        style: TextStyle(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white
+              : Colors.black54,
+        ),
       ),
       Text(
         '$deviceId',
-        style: Theme.of(context).textTheme.headline4,
+        style: TextStyle(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white
+              : Colors.black54,
+        ),
       ),
     ];
   }
   return <Widget>[
     Text(
       'Nenhum dispositivo cadastrado.',
+      style: TextStyle(
+        color: Theme.of(context).brightness == Brightness.dark
+            ? Colors.white
+            : Colors.black54,
+      ),
     ),
   ];
 }

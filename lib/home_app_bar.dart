@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/services.dart';
 
 enum Option { profile, menu, sair, entrar }
 
@@ -14,12 +16,39 @@ class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _HomeAppBarState extends State<HomeAppBar> {
-  FirebaseAuth auth = FirebaseAuth.instance;
-
-  Option _selection;
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   void _onSelected(Option option) {
-    _selection = option;
+    if (option == Option.sair) {
+      _signOut();
+    }
+  }
+
+  void _signOut() async {
+    await googleSignIn.signOut();
+    await _auth.signOut();
+  }
+
+  void _signIn() async {
+    try {
+      final GoogleSignInAccount googleSignInAccount =
+          await googleSignIn.signIn();
+      if (googleSignInAccount == null) return;
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      await _auth.signInWithCredential(credential);
+    } on PlatformException catch (err) {
+      print(err);
+    } catch (err) {
+      print(err);
+    }
   }
 
   FlatButton entrarSair(Option option) {
@@ -32,30 +61,34 @@ class _HomeAppBarState extends State<HomeAppBar> {
               color: Colors.white,
             ),
           ),
-          onPressed: () {},
+          onPressed: _signIn,
         );
         break;
       case Option.sair:
         return FlatButton(
           child: Text(
-            'sair',
+            'Sair',
             style: TextStyle(
               color: Colors.white,
             ),
           ),
-          onPressed: () {},
+          onPressed: _signOut,
         );
       default:
+        return FlatButton(
+          child: Text(''),
+          onPressed: () {},
+        );
     }
   }
 
   StreamBuilder userInfo(Option option) {
     if (option == Option.profile) {
       return StreamBuilder(
-        stream: auth.authStateChanges(),
+        stream: _auth.authStateChanges(),
         initialData: null,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.connectionState == ConnectionState.active) {
             if (snapshot.hasData) {
               final User user = snapshot.data;
               final photoUrl = user.photoURL;
@@ -67,17 +100,24 @@ class _HomeAppBarState extends State<HomeAppBar> {
       );
     }
     return StreamBuilder(
-      stream: auth.authStateChanges(),
+      stream: _auth.authStateChanges(),
       initialData: null,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.connectionState == ConnectionState.active) {
           if (snapshot.hasData) {
             return PopupMenuButton<Option>(
               onSelected: _onSelected,
               itemBuilder: (BuildContext context) => <PopupMenuEntry<Option>>[
-                const PopupMenuItem<Option>(
+                PopupMenuItem<Option>(
                   value: Option.sair,
-                  child: Text('sair'),
+                  child: Text(
+                    'Sair',
+                    style: TextStyle(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black54,
+                    ),
+                  ),
                 ),
               ],
             );
