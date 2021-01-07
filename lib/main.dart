@@ -4,6 +4,8 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import './home_app_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import './home_body.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,9 +47,63 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String _deviceId;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+
+  void _signIn() async {
+    try {
+      final GoogleSignInAccount googleSignInAccount =
+          await googleSignIn.signIn();
+      if (googleSignInAccount == null) return;
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      await _auth.signInWithCredential(credential);
+    } on PlatformException catch (err) {
+      print(err);
+    } catch (err) {
+      print(err);
+    }
+  }
 
   void _scanQrCode() async {
     // Platform messages may fail, so we use a try/catch PlatformException.
+
+    if (_auth.currentUser == null) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(
+            'É necessário login para adicionar dipositivos',
+            style: TextStyle(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black54,
+            ),
+          ),
+          actions: [
+            FlatButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancelar'),
+            ),
+            FlatButton(
+              onPressed: () {
+                Navigator.pop(context);
+                _signIn();
+              },
+              child: Text('Login'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
     try {
       final qrCode = await FlutterBarcodeScanner.scanBarcode(
           "#ff6666", "Cancelar", true, ScanMode.QR);

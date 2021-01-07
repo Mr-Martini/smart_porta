@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/services.dart';
 
-enum Option { profile, menu, sair, entrar }
+enum Options { profile, menu, sair, entrar }
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   HomeAppBar({Key key}) : super(key: key);
@@ -19,8 +19,8 @@ class _HomeAppBarState extends State<HomeAppBar> {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  void _onSelected(Option option) {
-    if (option == Option.sair) {
+  void _onSelected(Options option) {
+    if (option == Options.sair) {
       _signOut();
     }
   }
@@ -51,9 +51,9 @@ class _HomeAppBarState extends State<HomeAppBar> {
     }
   }
 
-  FlatButton entrarSair(Option option) {
+  FlatButton entrarSair(Options option) {
     switch (option) {
-      case Option.entrar:
+      case Options.entrar:
         return FlatButton(
           child: Text(
             'Entrar',
@@ -64,7 +64,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
           onPressed: _signIn,
         );
         break;
-      case Option.sair:
+      case Options.sair:
         return FlatButton(
           child: Text(
             'Sair',
@@ -82,8 +82,8 @@ class _HomeAppBarState extends State<HomeAppBar> {
     }
   }
 
-  StreamBuilder userInfo(Option option) {
-    if (option == Option.profile) {
+  StreamBuilder userInfo(Options option) {
+    if (option == Options.profile) {
       return StreamBuilder(
         stream: _auth.authStateChanges(),
         initialData: null,
@@ -111,11 +111,11 @@ class _HomeAppBarState extends State<HomeAppBar> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           if (snapshot.hasData) {
-            return PopupMenuButton<Option>(
+            return PopupMenuButton<Options>(
               onSelected: _onSelected,
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<Option>>[
-                PopupMenuItem<Option>(
-                  value: Option.sair,
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<Options>>[
+                PopupMenuItem<Options>(
+                  value: Options.sair,
                   child: Text(
                     'Sair',
                     style: TextStyle(
@@ -128,10 +128,10 @@ class _HomeAppBarState extends State<HomeAppBar> {
               ],
             );
           } else {
-            return entrarSair(Option.entrar);
+            return entrarSair(Options.entrar);
           }
         }
-        return entrarSair(Option.entrar);
+        return entrarSair(Options.entrar);
       },
     );
   }
@@ -139,10 +139,10 @@ class _HomeAppBarState extends State<HomeAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: userInfo(Option.profile),
+      leading: userInfo(Options.profile),
       title: Text('Início'),
       actions: [
-        userInfo(Option.menu),
+        userInfo(Options.menu),
       ],
     );
   }
