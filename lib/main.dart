@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import './home_app_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
+import './home_body.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -66,12 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HomeAppBar(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: _buildBody(_deviceId, context),
-        ),
-      ),
+      body: HomeBody(),
       floatingActionButton: FloatingActionButton(
         onPressed: _scanQrCode,
         tooltip: 'Adicionar dispositivo',
@@ -80,37 +76,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-}
-
-List<Widget> _buildBody(String deviceId, BuildContext context) {
-  if (deviceId != null) {
-    return <Widget>[
-      Text(
-        'Id do dispositivo:',
-        style: TextStyle(
-          color: Theme.of(context).brightness == Brightness.dark
-              ? Colors.white
-              : Colors.black54,
-        ),
-      ),
-      Text(
-        '$deviceId',
-        style: TextStyle(
-          color: Theme.of(context).brightness == Brightness.dark
-              ? Colors.white
-              : Colors.black54,
-        ),
-      ),
-    ];
-  }
-  return <Widget>[
-    Text(
-      'Nenhum dispositivo cadastrado.',
-      style: TextStyle(
-        color: Theme.of(context).brightness == Brightness.dark
-            ? Colors.white
-            : Colors.black54,
-      ),
-    ),
-  ];
 }

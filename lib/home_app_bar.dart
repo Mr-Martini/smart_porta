@@ -92,7 +92,13 @@ class _HomeAppBarState extends State<HomeAppBar> {
             if (snapshot.hasData) {
               final User user = snapshot.data;
               final photoUrl = user.photoURL;
-              return Image.network(photoUrl);
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(photoUrl),
+                  backgroundColor: Colors.transparent,
+                ),
+              );
             }
           }
           return Container();
