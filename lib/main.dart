@@ -6,6 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import './home_body.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,9 +48,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _deviceId;
+  String _raw;
   FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
+
+  void registerDevice() async {
+    if (_raw == "-1") return;
+
+    final payload = json.decode(_raw);
+
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    await firestore
+        .collection('users')
+        .doc(_auth.currentUser.uid)
+        .collection('devices')
+        .doc(payload["id"])
+        .set(payload);
+  }
 
   void _signIn() async {
     try {
@@ -112,8 +129,9 @@ class _MyHomePageState extends State<MyHomePage> {
       if (!mounted) return;
 
       setState(() {
-        _deviceId = qrCode;
+        _raw = qrCode;
       });
+      registerDevice();
     } on PlatformException {
       print('Failed to get platform version.');
     }
