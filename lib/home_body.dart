@@ -42,7 +42,7 @@ class _HomeBodyState extends State<HomeBody> {
               itemCount: devices.length,
               itemBuilder: (BuildContext context, int index) {
                 final Device device = devices[index];
-                return DeviceListTile(name: device.name);
+                return DeviceListTile(device: device);
               },
             );
           }

@@ -9,6 +9,7 @@ class Device {
   final String model;
   final String swVersion;
   final List<String> traits;
+  final bool isLocked;
 
   Device({
     @required this.name,
@@ -19,6 +20,7 @@ class Device {
     @required this.model,
     @required this.swVersion,
     @required this.traits,
+    this.isLocked
   });
 
   factory Device.fromSnapshot(Map<String, dynamic> snapshot) {
@@ -31,6 +33,7 @@ class Device {
       model: snapshot['deviceInfo']['model'],
       swVersion: snapshot['deviceInfo']['swVersion'],
       traits: List<String>.from(snapshot['traits']),
+      isLocked: snapshot["isLocked"]
     );
   }
 }
