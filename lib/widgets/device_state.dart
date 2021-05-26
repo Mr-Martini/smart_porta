@@ -5,7 +5,7 @@ import 'package:smart_porta/widgets/no_devices.dart';
 import 'package:smart_porta/widgets/state_list_tile.dart';
 
 class DeviceState extends StatefulWidget {
-  DeviceState({Key key, @required this.device}) : super(key: key);
+  DeviceState({Key? key, required this.device}) : super(key: key);
 
   final Device device;
 
@@ -16,7 +16,7 @@ class DeviceState extends StatefulWidget {
 class _DeviceStateState extends State<DeviceState> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  bool deviceIsLocked;
+  bool deviceIsLocked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,8 @@ class _DeviceStateState extends State<DeviceState> {
           if (snapshot.hasData) {
             final DocumentSnapshot data = snapshot.data;
             if (data.exists) {
-              final Device deviceDB = Device.fromSnapshot(data.data());
+              final snapshot = data.data() as Map<String, dynamic>;
+              final Device deviceDB = Device.fromSnapshot(snapshot);
               return ListView.builder(
                 itemCount: 1,
                 itemBuilder: (context, index) {

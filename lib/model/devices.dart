@@ -12,28 +12,28 @@ class Device {
   final bool isLocked;
 
   Device({
-    @required this.name,
-    @required this.type,
-    @required this.id,
-    @required this.hwVersion,
-    @required this.manufacturer,
-    @required this.model,
-    @required this.swVersion,
-    @required this.traits,
-    this.isLocked
+    required this.name,
+    required this.type,
+    required this.id,
+    required this.hwVersion,
+    required this.manufacturer,
+    required this.model,
+    required this.swVersion,
+    required this.traits,
+    required this.isLocked
   });
 
   factory Device.fromSnapshot(Map<String, dynamic> snapshot) {
     return Device(
-      name: snapshot['name']['name'],
-      type: snapshot['type'],
-      id: snapshot['id'],
-      hwVersion: snapshot['deviceInfo']['hwVersion'],
-      manufacturer: snapshot['deviceInfo']['manufacturer'],
-      model: snapshot['deviceInfo']['model'],
-      swVersion: snapshot['deviceInfo']['swVersion'],
-      traits: List<String>.from(snapshot['traits']),
-      isLocked: snapshot["isLocked"]
+      name: snapshot['name']['name'] ?? "unknown",
+      type: snapshot['type'] ?? "unknown",
+      id: snapshot['id'] ?? "unknown",
+      hwVersion: snapshot['deviceInfo']['hwVersion'] ?? "unknown",
+      manufacturer: snapshot['deviceInfo']['manufacturer'] ?? "unknown",
+      model: snapshot['deviceInfo']['model'] ?? "unknown",
+      swVersion: snapshot['deviceInfo']['swVersion'] ?? "unknown",
+      traits: List<String>.from(snapshot['traits'] ?? <String>[]),
+      isLocked: snapshot["isLocked"] ?? false
     );
   }
 }

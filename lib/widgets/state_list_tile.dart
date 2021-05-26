@@ -5,14 +5,14 @@ import 'package:smart_porta/model/devices.dart';
 class StateListTile extends StatefulWidget {
   final Device device;
 
-  StateListTile({Key key, @required this.device}) : super(key: key);
+  StateListTile({Key? key, required this.device}) : super(key: key);
 
   @override
   _StateListTileState createState() => _StateListTileState();
 }
 
 class _StateListTileState extends State<StateListTile> {
-  bool isLocked;
+  bool isLocked = false;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 

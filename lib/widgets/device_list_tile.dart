@@ -5,7 +5,7 @@ import 'package:smart_porta/screens/device_screen.dart';
 
 class DeviceListTile extends StatelessWidget {
   final Device device;
-  const DeviceListTile({Key key, @required this.device}) : super(key: key);
+  const DeviceListTile({Key? key, required this.device}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

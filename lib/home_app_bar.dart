@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 enum Options { profile, menu, sair, entrar }
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
-  HomeAppBar({Key key}) : super(key: key);
+  HomeAppBar({Key? key}) : super(key: key);
 
   @override
   _HomeAppBarState createState() => _HomeAppBarState();
@@ -32,7 +32,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
 
   void _signIn() async {
     try {
-      final GoogleSignInAccount googleSignInAccount =
+      final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
       if (googleSignInAccount == null) return;
       final GoogleSignInAuthentication googleSignInAuthentication =
@@ -51,10 +51,10 @@ class _HomeAppBarState extends State<HomeAppBar> {
     }
   }
 
-  FlatButton entrarSair(Options option) {
+  TextButton entrarSair(Options option) {
     switch (option) {
       case Options.entrar:
-        return FlatButton(
+        return TextButton(
           child: Text(
             'Entrar',
             style: TextStyle(
@@ -65,7 +65,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
         );
         break;
       case Options.sair:
-        return FlatButton(
+        return TextButton(
           child: Text(
             'Sair',
             style: TextStyle(
@@ -75,7 +75,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
           onPressed: _signOut,
         );
       default:
-        return FlatButton(
+        return TextButton(
           child: Text(''),
           onPressed: () {},
         );
@@ -92,6 +92,17 @@ class _HomeAppBarState extends State<HomeAppBar> {
             if (snapshot.hasData) {
               final User user = snapshot.data;
               final photoUrl = user.photoURL;
+
+              if (photoUrl == null) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                    child: Icon(Icons.person),
+                    backgroundColor: Colors.transparent,
+                  ),
+                );
+              }
+
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: CircleAvatar(

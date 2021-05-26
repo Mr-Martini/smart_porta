@@ -11,7 +11,7 @@ import '../home_app_bar.dart';
 import '../home_body.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+  MyHomePage({Key? key}) : super(key: key);
 
   static const String id = "home";
 
@@ -20,7 +20,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _raw;
+  String _raw = "";
   FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     await firestore
         .collection('users')
-        .doc(_auth.currentUser.uid)
+        .doc(_auth.currentUser?.uid)
         .collection('devices')
         .doc(payload["id"])
         .set(payload);
@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _signIn() async {
     try {
-      final GoogleSignInAccount googleSignInAccount =
+      final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
       if (googleSignInAccount == null) return;
       final GoogleSignInAuthentication googleSignInAuthentication =
@@ -76,11 +76,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           actions: [
-            FlatButton(
+            TextButton(
               onPressed: () => Navigator.pop(context),
               child: Text('Cancelar'),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Navigator.pop(context);
                 _signIn();

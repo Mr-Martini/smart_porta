@@ -4,7 +4,7 @@ import 'package:smart_porta/model/devices.dart';
 import '../widgets//device_state.dart';
 
 class DeviceScreen extends StatefulWidget {
-  DeviceScreen({Key key});
+  DeviceScreen({Key? key});
 
   static const String id = "device_screen";
 
@@ -15,7 +15,7 @@ class DeviceScreen extends StatefulWidget {
 class _DeviceScreenState extends State<DeviceScreen> {
   @override
   Widget build(BuildContext context) {
-    final Arguments args = ModalRoute.of(context).settings.arguments;
+    final Arguments args = ModalRoute.of(context)!.settings.arguments as Arguments;
     final Device device = args.device;
 
     return Scaffold(

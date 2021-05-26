@@ -7,7 +7,7 @@ import './model/devices.dart';
 import './widgets/device_list_tile.dart';
 
 class HomeBody extends StatefulWidget {
-  HomeBody({Key key}) : super(key: key);
+  HomeBody({Key? key}) : super(key: key);
 
   @override
   _HomeBodyState createState() => _HomeBodyState();
@@ -19,7 +19,7 @@ class _HomeBodyState extends State<HomeBody> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = _auth.currentUser;
+    final User? user = _auth.currentUser;
     if (user == null) return NoDevices();
     return StreamBuilder(
       stream: _firestore
@@ -35,7 +35,9 @@ class _HomeBodyState extends State<HomeBody> {
             final QuerySnapshot query = snapshot.data;
             final List<QueryDocumentSnapshot> listDocs = query.docs;
             for (QueryDocumentSnapshot document in listDocs) {
-              final Device device = Device.fromSnapshot(document.data());
+              final Map<String, dynamic> data =
+                  document.data() as Map<String, dynamic>;
+              final Device device = Device.fromSnapshot(data);
               devices.add(device);
             }
             return ListView.builder(

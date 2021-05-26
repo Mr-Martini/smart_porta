@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class NoDevices extends StatelessWidget {
   const NoDevices({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
