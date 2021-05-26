@@ -10,3 +10,9 @@ class GoogleSignInCanceledFailure extends Failure {}
 class UnknownFailure extends Failure {}
 
 class NetworkFailure extends Failure {}
+
+class NoUserFailure extends Failure {}
+
+class QRCodeCanceledFailure extends Failure {}
+
+class QRCodeFailure extends Failure {}

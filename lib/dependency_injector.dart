@@ -7,6 +7,11 @@ import 'package:smart_porta/features/google_sign_in/data/repositories/sign_in_wi
 import 'package:smart_porta/features/google_sign_in/domain/repositories/sign_in_with_google_repository.dart';
 import 'package:smart_porta/features/google_sign_in/domain/use_cases/sign_in_with_google_usecase.dart';
 import 'package:smart_porta/features/google_sign_in/presentation/bloc/sign_in_with_google_bloc.dart';
+import 'package:smart_porta/features/scan_device/data/data_sources/scan_device_local_datasource.dart';
+import 'package:smart_porta/features/scan_device/data/repositories/scan_device_repository_impl.dart';
+import 'package:smart_porta/features/scan_device/domain/repositories/scan_device_repository.dart';
+import 'package:smart_porta/features/scan_device/domain/use_cases/scan_device_usecase.dart';
+import 'package:smart_porta/features/scan_device/presentation/bloc/scan_device_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -15,6 +20,7 @@ void init() {
   registerCloudFirestore();
   registerGoogleSignInClient();
   registerGoogleSignIn();
+  registerScanDevice();
 }
 
 void registerFirebaseAuth() {
@@ -51,6 +57,33 @@ void registerGoogleSignIn() {
   sl.registerLazySingleton<SignInWithGoogleRemoteDataSource>(
     () => SignInWithGoogleRemoteDataSourceImpl(
       googleSignIn: sl.get<GoogleSignIn>(),
+      auth: sl.get<FirebaseAuth>(),
+    ),
+  );
+}
+
+void registerScanDevice() {
+  sl.registerFactory(
+    () => ScanDeviceBloc(
+      scanDevice: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton(
+    () => ScanDeviceUseCase(
+      repository: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<ScanDeviceRepository>(
+    () => ScanDeviceRepositoryImpl(
+      dataSource: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<ScanDeviceLocalDataSource>(
+    () => ScanDeviceLocalDataSourceImpl(
+      firestore: sl.get<FirebaseFirestore>(),
       auth: sl.get<FirebaseAuth>(),
     ),
   );
