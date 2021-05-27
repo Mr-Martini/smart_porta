@@ -7,7 +7,7 @@ import '../widgets/dashboard/dashboard_body.dart';
 class DashboardScreen extends StatelessWidget {
   DashboardScreen({Key? key}) : super(key: key);
 
-  static const String id = "home";
+  static const String id = "/";
 
   @override
   Widget build(BuildContext context) {

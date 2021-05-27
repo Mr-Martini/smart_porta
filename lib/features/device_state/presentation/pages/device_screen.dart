@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_porta/arguments.dart';
 import 'package:smart_porta/dependency_injector.dart';
 import 'package:smart_porta/features/device_state/presentation/bloc/device_state_bloc.dart';
 import 'package:smart_porta/features/device_state/presentation/widgets/device_screen_body.dart';
+import 'package:vrouter/vrouter.dart';
+
 
 class DeviceScreen extends StatefulWidget {
-  static const String id = "device";
+  static const String id = "/device";
 
   const DeviceScreen({Key? key}) : super(key: key);
 
@@ -17,14 +18,22 @@ class DeviceScreen extends StatefulWidget {
 class _DeviceScreenState extends State<DeviceScreen> {
   @override
   Widget build(BuildContext context) {
-    final Arguments args =
-        ModalRoute.of(context)!.settings.arguments as Arguments;
+
+    final device = context.vRouter.queryParameters;
+
+    final String? id = device["id"];
+    final String? name = device["name"];
+    if (id == null || id.isEmpty || name == null || name.isEmpty) {
+      return Center(
+        child: Text("Failed to get data for device $id"),
+      );
+    }
 
     return BlocProvider(
       create: (context) => sl.get<DeviceStateBloc>()
-        ..add(DeviceStateGetState(id: args.device.id)),
+        ..add(DeviceStateGetState(id: id)),
       child: DeviceScreenBody(
-        device: args.device,
+        name: name,
       ),
     );
   }

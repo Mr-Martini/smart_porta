@@ -3,13 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_porta/features/core/failures/failure.dart';
 import 'package:smart_porta/features/device_state/presentation/bloc/device_state_bloc.dart';
-import 'package:smart_porta/model/devices.dart';
 import 'package:smart_porta/screens/landing.dart';
 
 class DeviceScreenBody extends StatefulWidget {
-  final Device device;
+  final String name;
 
-  const DeviceScreenBody({Key? key, required this.device}) : super(key: key);
+  const DeviceScreenBody({Key? key, required this.name}) : super(key: key);
 
   @override
   _DeviceScreenBodyState createState() => _DeviceScreenBodyState();
@@ -22,7 +21,7 @@ class _DeviceScreenBodyState extends State<DeviceScreenBody> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.device.name),
+        title: Text(widget.name),
         leading: IconButton(
           onPressed: () {
             if (Navigator.canPop(context)) {

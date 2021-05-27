@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 class Device {
   final String name;
   final String type;
@@ -35,5 +33,12 @@ class Device {
       traits: List<String>.from(snapshot['traits'] ?? <String>[]),
       isLocked: snapshot["isLocked"] ?? false
     );
+  }
+
+  Map<String, String> get toJson {
+    return <String, String>{
+      "name": name,
+      "id": id,
+    };
   }
 }

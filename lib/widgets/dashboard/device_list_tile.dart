@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_porta/features/device_state/presentation/pages/device_screen.dart';
 import 'package:smart_porta/model/devices.dart';
-
-import '../../arguments.dart';
+import 'package:vrouter/vrouter.dart';
 
 class DeviceListTile extends StatelessWidget {
   final Device device;
@@ -15,10 +14,7 @@ class DeviceListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed(
-          DeviceScreen.id,
-          arguments: Arguments(device: device),
-        );
+        context.vRouter.push(DeviceScreen.id, queryParameters: device.toJson);
       },
       child: ListTile(
         leading: Icon(Icons.lock),

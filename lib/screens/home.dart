@@ -4,7 +4,7 @@ import 'package:smart_porta/features/google_sign_in/presentation/widgets/sign_in
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
 
-  static const String id = "home";
+  static const String id = "/welcome";
 
   @override
   Widget build(BuildContext context) {

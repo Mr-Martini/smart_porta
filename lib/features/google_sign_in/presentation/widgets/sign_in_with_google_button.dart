@@ -5,6 +5,8 @@ import 'package:smart_porta/dependency_injector.dart';
 import 'package:smart_porta/features/core/failures/failure.dart';
 import 'package:smart_porta/features/google_sign_in/presentation/bloc/sign_in_with_google_bloc.dart';
 import 'package:smart_porta/screens/dashboard.dart';
+import 'package:vrouter/vrouter.dart';
+
 
 class SignInWithGoogleButton extends StatelessWidget {
   const SignInWithGoogleButton({Key? key}) : super(key: key);
@@ -31,11 +33,7 @@ class SignInWithGoogleButton extends StatelessWidget {
             BlocListener<SignInWithGoogleBloc, SignInWithGoogleState>(
           listener: (context, state) {
             if (state is SignInWithGoogleLoaded) {
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                DashboardScreen.id,
-                (route) => false,
-              );
+              context.vRouter.push(DashboardScreen.id);
             }
 
             if (state is SignInWithGoogleError) {

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smart_porta/dependency_injector.dart';
-import 'package:smart_porta/screens/landing.dart';
+import 'package:smart_porta/screens/home.dart';
+import 'package:vrouter/vrouter.dart';
 
 import '../../features/user_photo/presentation/widgets/user_photo_avatar.dart';
 
@@ -23,11 +24,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
   void _signOut() async {
     await googleSignIn.signOut();
     await _auth.signOut();
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      LandingScreen.id,
-      (route) => false,
-    );
+    context.vRouter.push(WelcomeScreen.id);
   }
 
   void onSelected(int index) {
