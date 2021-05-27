@@ -18,3 +18,5 @@ class QRCodeCanceledFailure extends Failure {}
 class QRCodeFailure extends Failure {}
 
 class NoPhotoUrlFailure extends Failure {}
+
+class NoDeviceFailure extends Failure {}

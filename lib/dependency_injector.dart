@@ -2,6 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:smart_porta/features/device_state/data/data_sources/device_state_remote_datasource.dart';
+import 'package:smart_porta/features/device_state/data/repositories/device_state_repository_impl.dart';
+import 'package:smart_porta/features/device_state/domain/repositories/device_state_repository.dart';
+import 'package:smart_porta/features/device_state/domain/use_cases/device_state_get_state.dart';
+import 'package:smart_porta/features/device_state/presentation/bloc/device_state_bloc.dart';
 import 'package:smart_porta/features/google_sign_in/data/data_sources/sign_in_with_google_remote_datasource.dart';
 import 'package:smart_porta/features/google_sign_in/data/repositories/sign_in_with_google_repository_impl.dart';
 import 'package:smart_porta/features/google_sign_in/domain/repositories/sign_in_with_google_repository.dart';
@@ -27,6 +32,7 @@ void init() {
   registerGoogleSignIn();
   registerScanDevice();
   registerUserPhoto();
+  registerDeviceState();
 }
 
 void registerFirebaseAuth() {
@@ -97,26 +103,53 @@ void registerScanDevice() {
 
 void registerUserPhoto() {
   sl.registerFactory(
-        () => UserPhotoBloc(
+    () => UserPhotoBloc(
       getPhoto: sl(),
     ),
   );
 
   sl.registerLazySingleton(
-        () => UserPhotoUseCase(
+    () => UserPhotoUseCase(
       repository: sl(),
     ),
   );
 
   sl.registerLazySingleton<UserPhotoRepository>(
-        () => UserPhotoRepositoryImpl(
+    () => UserPhotoRepositoryImpl(
       dataSource: sl(),
     ),
   );
 
   sl.registerLazySingleton<UserPhotoRemoteDataSource>(
-        () => UserPhotoRemoteDataSourceImpl(
+    () => UserPhotoRemoteDataSourceImpl(
       auth: sl.get<FirebaseAuth>(),
+    ),
+  );
+}
+
+void registerDeviceState() {
+  sl.registerFactory(
+    () => DeviceStateBloc(
+      getState: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton(
+    () => DeviceStateGetStateUseCase(
+      repository: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<DeviceStateRepository>(
+    () => DeviceStateRepositoryImpl(
+      dataSource: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<DeviceStateRemoteDataSource>(
+    () => DeviceStateRemoteDataSourceImpl(
+      auth: sl.get<FirebaseAuth>(),
+      firestore: sl.get<FirebaseFirestore>(),
     ),
   );
 }

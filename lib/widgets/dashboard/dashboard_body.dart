@@ -4,9 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smart_porta/dependency_injector.dart';
 import 'package:smart_porta/model/devices.dart';
-import './widgets/no_devices.dart';
-import './model/devices.dart';
-import './widgets/device_list_tile.dart';
+import 'no_devices.dart';
+import '../../model/devices.dart';
+import 'device_list_tile.dart';
 
 class DashboardBody extends StatefulWidget {
   DashboardBody({Key? key}) : super(key: key);
@@ -44,9 +44,13 @@ class _DashboardBodyState extends State<DashboardBody> {
             }
             return ListView.builder(
               itemCount: devices.length,
+              physics: BouncingScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 final Device device = devices[index];
-                return DeviceListTile(device: device);
+                return DeviceListTile(
+                  device: device,
+                  key: Key(device.id),
+                );
               },
             );
           } else {

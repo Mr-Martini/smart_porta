@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:smart_porta/arguments.dart';
+import 'package:smart_porta/features/device_state/presentation/pages/device_screen.dart';
 import 'package:smart_porta/model/devices.dart';
-import 'package:smart_porta/screens/device_screen.dart';
+
+import '../../arguments.dart';
 
 class DeviceListTile extends StatelessWidget {
   final Device device;
-  const DeviceListTile({Key? key, required this.device}) : super(key: key);
+  const DeviceListTile({
+    required Key key,
+    required this.device,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(
-          context,
+        Navigator.of(context).pushNamed(
           DeviceScreen.id,
           arguments: Arguments(device: device),
         );
@@ -21,11 +24,6 @@ class DeviceListTile extends StatelessWidget {
         leading: Icon(Icons.lock),
         title: Text(
           device.name,
-          style: TextStyle(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? Colors.white
-                : Colors.black54,
-          ),
         ),
       ),
     );

@@ -16,11 +16,14 @@ class UserPhotoAvatar extends StatelessWidget {
           return BlocBuilder<UserPhotoBloc, UserPhotoState>(
             builder: (context, state) {
               if (state is UserPhotoLoaded) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(state.url),
-                    backgroundColor: Colors.transparent,
+                return Tooltip(
+                  message: "Profile photo",
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(state.url),
+                      backgroundColor: Colors.transparent,
+                    ),
                   ),
                 );
               } else if (state is UserPhotoError) {
