@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/services.dart';
+import 'package:smart_porta/features/user_photo/presentation/widgets/user_photo_avatar.dart';
 
 enum Options { profile, menu, sair, entrar }
 
@@ -63,7 +64,6 @@ class _HomeAppBarState extends State<HomeAppBar> {
           ),
           onPressed: _signIn,
         );
-        break;
       case Options.sair:
         return TextButton(
           child: Text(
@@ -150,7 +150,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: userInfo(Options.profile),
+      leading: UserPhotoAvatar(),
       title: Text('Início'),
       actions: [
         userInfo(Options.menu),

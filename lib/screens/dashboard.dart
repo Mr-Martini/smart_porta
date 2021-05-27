@@ -13,7 +13,7 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HomeAppBar(),
-      body: HomeBody(),
+      body: DashboardBody(),
       floatingActionButton: ScanDeviceButton(),
     );
   }

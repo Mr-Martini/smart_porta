@@ -12,6 +12,11 @@ import 'package:smart_porta/features/scan_device/data/repositories/scan_device_r
 import 'package:smart_porta/features/scan_device/domain/repositories/scan_device_repository.dart';
 import 'package:smart_porta/features/scan_device/domain/use_cases/scan_device_usecase.dart';
 import 'package:smart_porta/features/scan_device/presentation/bloc/scan_device_bloc.dart';
+import 'package:smart_porta/features/user_photo/data/data_sources/user_photo_remote_datasource.dart';
+import 'package:smart_porta/features/user_photo/data/repositories/user_photo_repository_impl.dart';
+import 'package:smart_porta/features/user_photo/domain/repositories/user_photo_repository.dart';
+import 'package:smart_porta/features/user_photo/domain/use_cases/user_photo_usecase.dart';
+import 'package:smart_porta/features/user_photo/presentation/bloc/user_photo_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -21,6 +26,7 @@ void init() {
   registerGoogleSignInClient();
   registerGoogleSignIn();
   registerScanDevice();
+  registerUserPhoto();
 }
 
 void registerFirebaseAuth() {
@@ -84,6 +90,32 @@ void registerScanDevice() {
   sl.registerLazySingleton<ScanDeviceLocalDataSource>(
     () => ScanDeviceLocalDataSourceImpl(
       firestore: sl.get<FirebaseFirestore>(),
+      auth: sl.get<FirebaseAuth>(),
+    ),
+  );
+}
+
+void registerUserPhoto() {
+  sl.registerFactory(
+        () => UserPhotoBloc(
+      getPhoto: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton(
+        () => UserPhotoUseCase(
+      repository: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<UserPhotoRepository>(
+        () => UserPhotoRepositoryImpl(
+      dataSource: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<UserPhotoRemoteDataSource>(
+        () => UserPhotoRemoteDataSourceImpl(
       auth: sl.get<FirebaseAuth>(),
     ),
   );

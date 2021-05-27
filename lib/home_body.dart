@@ -1,21 +1,23 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:smart_porta/dependency_injector.dart';
 import 'package:smart_porta/model/devices.dart';
 import './widgets/no_devices.dart';
 import './model/devices.dart';
 import './widgets/device_list_tile.dart';
 
-class HomeBody extends StatefulWidget {
-  HomeBody({Key? key}) : super(key: key);
+class DashboardBody extends StatefulWidget {
+  DashboardBody({Key? key}) : super(key: key);
 
   @override
-  _HomeBodyState createState() => _HomeBodyState();
+  _DashboardBodyState createState() => _DashboardBodyState();
 }
 
-class _HomeBodyState extends State<HomeBody> {
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  FirebaseAuth _auth = FirebaseAuth.instance;
+class _DashboardBodyState extends State<DashboardBody> {
+  FirebaseFirestore _firestore = sl.get<FirebaseFirestore>();
+  FirebaseAuth _auth = sl.get<FirebaseAuth>();
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +49,13 @@ class _HomeBodyState extends State<HomeBody> {
                 return DeviceListTile(device: device);
               },
             );
+          } else {
+            return NoDevices();
           }
         }
-        return NoDevices();
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       },
     );
   }
