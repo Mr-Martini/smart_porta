@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -17,6 +18,11 @@ import 'package:smart_porta/features/scan_device/data/repositories/scan_device_r
 import 'package:smart_porta/features/scan_device/domain/repositories/scan_device_repository.dart';
 import 'package:smart_porta/features/scan_device/domain/use_cases/scan_device_usecase.dart';
 import 'package:smart_porta/features/scan_device/presentation/bloc/scan_device_bloc.dart';
+import 'package:smart_porta/features/update_device_state/data/data_sources/update_device_state_remote_service.dart';
+import 'package:smart_porta/features/update_device_state/data/repositories/update_device_state_repository_impl.dart';
+import 'package:smart_porta/features/update_device_state/domain/repositories/update_device_state_repository.dart';
+import 'package:smart_porta/features/update_device_state/domain/use_cases/update_device_state_usecase.dart';
+import 'package:smart_porta/features/update_device_state/presentation/bloc/update_device_state_bloc.dart';
 import 'package:smart_porta/features/user_photo/data/data_sources/user_photo_remote_datasource.dart';
 import 'package:smart_porta/features/user_photo/data/repositories/user_photo_repository_impl.dart';
 import 'package:smart_porta/features/user_photo/domain/repositories/user_photo_repository.dart';
@@ -33,6 +39,7 @@ void init() {
   registerScanDevice();
   registerUserPhoto();
   registerDeviceState();
+  registerUpdateDeviceState();
 }
 
 void registerFirebaseAuth() {
@@ -152,4 +159,33 @@ void registerDeviceState() {
       firestore: sl.get<FirebaseFirestore>(),
     ),
   );
+}
+
+void registerUpdateDeviceState() {
+  sl.registerFactory(
+    () => UpdateDeviceStateBloc(
+      updateDevice: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton(
+    () => UpdateDeviceStateUseCase(
+      repository: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<UpdateDeviceStateRepository>(
+    () => UpdateDeviceStateRepositoryImpl(
+      service: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<UpdateDeviceStateRemoteService>(
+    () => UpdateDeviceStateRemoteServiceImpl(
+      auth: sl.get<FirebaseAuth>(),
+      dio: sl(),
+    ),
+  );
+
+  sl.registerSingleton(Dio());
 }

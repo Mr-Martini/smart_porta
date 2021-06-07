@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_porta/dependency_injector.dart' show sl;
@@ -44,6 +45,10 @@ class ScanDeviceButton extends StatelessWidget {
           },
           child: BlocBuilder<ScanDeviceBloc, ScanDeviceState>(
             builder: (context, state) {
+              if (kIsWeb) {
+                return Container();
+              }
+
               if (state is ScanDeviceLoading) {
                 return FloatingActionButton(
                   onPressed: null,

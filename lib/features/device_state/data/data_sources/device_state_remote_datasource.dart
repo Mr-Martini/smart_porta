@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:smart_porta/features/core/exceptions/exceptions.dart';
 import 'package:smart_porta/features/device_state/data/models/device_state_model.dart';
 
@@ -21,7 +22,9 @@ class DeviceStateRemoteDataSourceImpl implements DeviceStateRemoteDataSource {
   Future<DeviceStateModel> getState(String id) async {
     final User? user = auth.currentUser;
 
-    if (user == null) throw NoUserException();
+    if (!kIsWeb) {
+      if (user == null) throw NoUserException();
+    }
 
     final device = await firestore.collection("devices").doc(id).get();
 

@@ -10,3 +10,5 @@ class QRCanceledException implements Exception {}
 class NoPhotoUrlException implements Exception {}
 
 class NoDeviceException implements Exception {}
+
+class NotAllowedException implements Exception {}

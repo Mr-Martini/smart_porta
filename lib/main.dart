@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:smart_porta/dependency_injector.dart' as dp;
@@ -23,6 +24,21 @@ class MyApp extends StatelessWidget {
     return auth.currentUser != null;
   }
 
+  bool get shouldEnterDashboard {
+    if (kIsWeb) return true;
+
+    return isAuthenticated;
+
+  }
+
+
+  bool get shouldWelcomeDashboard {
+    if (kIsWeb) return false;
+
+    return !isAuthenticated;
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return VRouter(
@@ -35,7 +51,7 @@ class MyApp extends StatelessWidget {
       routes: [
         VGuard(
           beforeEnter: (vRedirector) async =>
-              !isAuthenticated ? vRedirector.push(WelcomeScreen.id) : null,
+              !shouldEnterDashboard ? vRedirector.push(WelcomeScreen.id) : null,
           stackedRoutes: [
             VWidget(path: DashboardScreen.id, widget: DashboardScreen()),
             VWidget(path: DeviceScreen.id, widget: DeviceScreen()),
@@ -43,7 +59,7 @@ class MyApp extends StatelessWidget {
         ),
         VGuard(
           beforeEnter: (vRedirector) async =>
-              isAuthenticated ? vRedirector.push(DashboardScreen.id) : null,
+              !shouldWelcomeDashboard ? vRedirector.push(DashboardScreen.id) : null,
           stackedRoutes: [
             VWidget(path: WelcomeScreen.id, widget: WelcomeScreen()),
           ],

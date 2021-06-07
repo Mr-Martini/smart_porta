@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -43,25 +44,27 @@ class _HomeAppBarState extends State<HomeAppBar> {
       leading: UserPhotoAvatar(),
       title: Text('Início'),
       actions: [
-        PopupMenuButton(
-          initialValue: 1,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Icon(Icons.more_vert),
-          ),
-          onSelected: onSelected,
-          itemBuilder: (context) {
-            return List.generate(
-              1,
-              (index) {
-                return PopupMenuItem(
-                  value: index,
-                  child: Text("Sair"),
-                );
-              },
-            );
-          },
-        ),
+        !kIsWeb
+            ? PopupMenuButton(
+                initialValue: 1,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Icon(Icons.more_vert),
+                ),
+                onSelected: onSelected,
+                itemBuilder: (context) {
+                  return List.generate(
+                    1,
+                    (index) {
+                      return PopupMenuItem(
+                        value: index,
+                        child: Text("Sair"),
+                      );
+                    },
+                  );
+                },
+              )
+            : Container(),
       ],
     );
   }

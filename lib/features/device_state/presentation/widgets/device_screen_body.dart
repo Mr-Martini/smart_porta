@@ -1,22 +1,28 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:smart_porta/features/core/failures/failure.dart';
 import 'package:smart_porta/features/device_state/presentation/bloc/device_state_bloc.dart';
-import 'package:smart_porta/screens/landing.dart';
+import 'package:smart_porta/features/update_device_state/presentation/bloc/update_device_state_bloc.dart';
+import 'package:smart_porta/features/update_device_state/presentation/widgets/update_device_state.dart';
+import 'package:smart_porta/screens/dashboard.dart';
+import 'package:vrouter/vrouter.dart';
 
 class DeviceScreenBody extends StatefulWidget {
   final String name;
+  final String id;
 
-  const DeviceScreenBody({Key? key, required this.name}) : super(key: key);
+  const DeviceScreenBody({
+    Key? key,
+    required this.name,
+    required this.id,
+  }) : super(key: key);
 
   @override
   _DeviceScreenBodyState createState() => _DeviceScreenBodyState();
 }
 
 class _DeviceScreenBodyState extends State<DeviceScreenBody> {
-  void onChanged(bool newValue) {}
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,15 +30,7 @@ class _DeviceScreenBodyState extends State<DeviceScreenBody> {
         title: Text(widget.name),
         leading: IconButton(
           onPressed: () {
-            if (Navigator.canPop(context)) {
-              Navigator.pop(context);
-              return;
-            }
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              LandingScreen.id,
-              (route) => false,
-            );
+            context.vRouter.push(DashboardScreen.id);
           },
           icon: Icon(Icons.arrow_back),
         ),
@@ -42,13 +40,54 @@ class _DeviceScreenBodyState extends State<DeviceScreenBody> {
           if (state is DeviceStateLoaded) {
             final bool isLocked = state.isLocked;
 
-            return ListTile(
-              leading: Icon(Icons.door_sliding),
-              title: Text(isLocked ? "Fechada" : "Aberta"),
-              trailing: IconButton(
-                tooltip: "Dispositivo está ${isLocked ? "fechado" : "aberto"}",
-                onPressed: () => onChanged(!isLocked),
-                icon: Icon(isLocked ? Icons.lock : Icons.lock_open),
+            return Center(
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Tooltip(
+                            message: isLocked ? "Abrir porta" : "Fechar porta",
+                            child: InkWell(
+                              customBorder: CircleBorder(),
+                              onTap: () =>
+                                  BlocProvider.of<UpdateDeviceStateBloc>(
+                                          context)
+                                      .add(
+                                UpdateDeviceStateAction(
+                                  id: state.id,
+                                  state: !state.isLocked,
+                                ),
+                              ),
+                              child: Container(
+                                width: 200,
+                                height: 200,
+                                child: Icon(
+                                  isLocked ? Icons.lock : Icons.lock_open,
+                                  size: 150,
+                                ),
+                              ),
+                            ),
+                          ),
+                          UpdateDeviceStateWidget(id: widget.id),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        isLocked ? "Fechado" : "Aberto",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 40,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             );
           } else if (state is DeviceStateError) {
@@ -63,30 +102,17 @@ class _DeviceScreenBodyState extends State<DeviceScreenBody> {
                 child: Text("Falha ao obter dispositivo"),
               );
             }
-            return ListTile(
-              leading: Icon(Icons.lock),
-              title: Text("Erro"),
-              trailing: Switch(
-                value: false,
-                onChanged: onChanged,
+            return Center(
+              child: InkWell(
+                onTap: () => BlocProvider.of<DeviceStateBloc>(context)
+                    .add(DeviceStateGetState(id: widget.id)),
+                child: Text("Erro desconhecido"),
               ),
             );
           }
 
-          return Shimmer.fromColors(
-            baseColor: Theme.of(context).scaffoldBackgroundColor,
-            highlightColor: Theme.of(context).accentColor,
-            child: ListTile(
-              leading: SizedBox(
-                width: 24,
-                height: 24,
-              ),
-              title: SizedBox(width: 40),
-              trailing: SizedBox(
-                width: 16,
-                height: 16,
-              ),
-            ),
+          return Center(
+            child: CircularProgressIndicator(),
           );
         },
       ),
