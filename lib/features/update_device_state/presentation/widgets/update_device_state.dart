@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_porta/features/core/failures/failure.dart';
-import 'package:smart_porta/features/device_state/presentation/bloc/device_state_bloc.dart';
 import 'package:smart_porta/features/update_device_state/presentation/bloc/update_device_state_bloc.dart';
 
 class UpdateDeviceStateWidget extends StatefulWidget {
@@ -32,8 +31,7 @@ class _UpdateDeviceStateWidgetState extends State<UpdateDeviceStateWidget> {
     return BlocListener<UpdateDeviceStateBloc, UpdateDeviceStateState>(
       listener: (BuildContext context, UpdateDeviceStateState state) {
         if (state is UpdateDeviceLoaded) {
-          BlocProvider.of<DeviceStateBloc>(context)
-              .add(DeviceStateGetState(id: widget.id));
+
         } else if (state is UpdateDeviceError) {
           final Failure failure = state.failure;
 

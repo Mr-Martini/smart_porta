@@ -31,11 +31,8 @@ class _DeviceScreenState extends State<DeviceScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => sl.get<DeviceStateBloc>()
-            ..add(
-              DeviceStateGetState(id: id),
-            ),
-        ),
+            create: (context) => sl.get<DeviceStateBloc>()
+              ..add(DeviceStateInitialEvent(id: id))),
         BlocProvider(create: (context) => sl.get<UpdateDeviceStateBloc>()),
       ],
       child: DeviceScreenBody(

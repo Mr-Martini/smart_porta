@@ -23,6 +23,7 @@ class DeviceScreenBody extends StatefulWidget {
 }
 
 class _DeviceScreenBodyState extends State<DeviceScreenBody> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

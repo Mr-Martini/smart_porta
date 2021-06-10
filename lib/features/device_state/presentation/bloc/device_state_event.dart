@@ -12,3 +12,12 @@ class DeviceStateGetState extends DeviceStateEvent {
   @override
   List<Object?> get props => [id];
 }
+
+class DeviceStateInitialEvent extends DeviceStateEvent {
+  final String id;
+
+  DeviceStateInitialEvent({required this.id});
+
+  @override
+  List<Object?> get props => [id];
+}
